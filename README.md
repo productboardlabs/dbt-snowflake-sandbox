@@ -20,7 +20,9 @@ There are two ways:
 2. Using shell script wrapper to avoid writing long commands: `sandbox <model1> <model2> <model..n>`
 
 
-## Example
+## How to use the macro
+
+### Local development
 
 Imagine the situation we would like to debug some issue in the `amplitude_events` model. To run the model in our schema we need
 to have access to the data from production schemas. At the same time, we want to avoid situation when the source data will
@@ -30,6 +32,15 @@ So we have to clone all models/tables into our schema.
 ![Lineage graph](lineage.png)
 
 ![Run example](run.gif)
+
+### CI pipeline
+
+If you want to execute the models in your CI pipeline (AKA dry run) and then run some tests, you can use this macro as well.
+
+To detect changes in your repository you can use `git diff` command to compare two states. For example, this is a code
+we use in Gitlab pipelines to detect changed models to setup the sandbox and run them:
+
+`git diff --diff-filter=AM --name-only $CI_MERGE_REQUEST_DIFF_BASE_SHA...$CI_COMMIT_SHA | grep './models.*\.sql' | sort | uniq `
 
 ## What's next
 
